@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://unpkg.com/htmx.org@1.9.5" integrity="sha384-xcuj3WpfgjlKF+FXhSQFQ0ZNr39ln+hwjN3npfM9VBnUskLolQAcN80McRIVOPuO" crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <div class="container">
+      <form class="task-form" hx-post="http://localhost:3000/api/v1/" hx-target='.task-list' hx-swap='beforeend'>
+        <input type="text" name='task' class="task-name" placeholder="Write you task here" maxlength="65">
+        <button type="submit" class="task-submit">Submit</button>
+      </form>
+        <h2 class="tasks-heading">Tasks</h2> 
+      <div class="task-list">
+      </div>
+    </div>
+  </body>
+</html>
