@@ -1,4 +1,1 @@
-{
-  "1.": "buy groceries",
-  "2.": "kill John"
-}
+{"tasks":[{"task":"go to the store","status":"incomplete"},{"task":"go to the store","status":"incomplete"},{"task":"go to the store","status":"incomplete"},{"task":"go to the store","status":"incomplete"},{"task":"go to the store","status":"incomplete"},{"task":"go to the store","status":"incomplete"}]}
