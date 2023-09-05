@@ -21,9 +21,8 @@ class TodoController {
         if (err) {
           return res.status(500).json({message: 'Internal Server Error'})
         }
-      })
-
       return res.status(201).render('add-task.hbs', {task: req.body.task, id:id })
+      })
     })
   }
 
@@ -58,9 +57,8 @@ class TodoController {
         if (err) {
           return res.status(500).json({message: 'Internal Server Error'})
         }
-      })
-
        return res.status(200).json({...neededTask, status: "completed"})
+      })
     })
   }
 
