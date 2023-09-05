@@ -4,12 +4,12 @@ class TodoController {
 
   static async createTask (req, res)  {
     fs.readFile(__dirname + '/todo.json', (err, data) => {
-        const content = JSON.parse(data);
-        const id = content.tasks.length > 0 ? content.tasks.length + 1 : 1;
+        const taskList = JSON.parse(data);
+        const id = taskList.tasks.length > 0 ? taskList.tasks.length + 1 : 1;
         const task = {id: id,  task: req.body.task, status: "incomplete"}
-        content.tasks.push(task)
-        const newTasks = JSON.stringify(content)
-        fs.writeFile(__dirname + '/todo.json', newTasks, (err) => {
+        taskList.tasks.push(task)
+        const newTaskList = JSON.stringify(taskList)
+        fs.writeFile(__dirname + '/todo.json', newTaskList, (err) => {
           if (err) {
             console.log(err)
           }
@@ -22,15 +22,15 @@ class TodoController {
   static async completeTask (req, res)  {
     fs.readFile(__dirname + '/todo.json', (err, data) => {
         const id = +req.body.id;
-        const currentTaskList = JSON.parse(data);
-        const changedTasks = currentTaskList.tasks.map(task => {
+        const taskList = JSON.parse(data);
+        const changedTasks = taskList.tasks.map(task => {
           if (task.id === id) {
             return {...task, status : 'completed'}
           }
             return task 
         })
-        currentTaskList.tasks = changedTasks;
-        fs.writeFile(__dirname + '/todo.json', JSON.stringify(currentTaskList), (err) => {
+        taskList.tasks = changedTasks;
+        fs.writeFile(__dirname + '/todo.json', JSON.stringify(taskList), (err) => {
           if (err) {
             console.log('error completing')
           }
@@ -40,21 +40,21 @@ class TodoController {
   }
 
   static async deleteTask (req, res)  {
-      res.send().status(204)
     fs.readFile(__dirname + '/todo.json', (err, data) => {
         const id = +req.params.id;
-        const currentTaskList = JSON.parse(data);
-        const neededTask = currentTaskList.tasks.find(task => task.id === id)
-        if (neededTask) {
-          const newTaskList = currentTaskList.tasks.filter(task => task.id !== id)          
-          currentTaskList.tasks = newTaskList;
-        fs.writeFile(__dirname + '/todo.json', JSON.stringify(currentTaskList), (err) => {
+        const taskList = JSON.parse(data);
+        const neededTask = taskList.tasks.find(task => task.id === id)
+        if (!neededTask) {
+          return res.status(404).json({message: 'Task not found'})
+        }
+        const newTaskList = taskList.tasks.filter(task => task.id !== id)          
+        taskList.tasks = newTaskList;
+        fs.writeFile(__dirname + '/todo.json', JSON.stringify(taskList), (err) => {
           if (err) {
             console.log('error completing')
           }
-          console.log('completed successfully')
+          res.status(204).end()
         })
-        }
     })
   }
 
