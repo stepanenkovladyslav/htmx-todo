@@ -9,7 +9,7 @@
   </head>
   <body>
     <div class="container">
-      <form class="task-form" hx-post="http://localhost:3000/api/v1/" hx-target='.task-list' hx-swap='beforeend'>
+      <form class="task-form" hx-post="http://localhost:3000/api/v1/tasks" hx-target='.task-list' hx-swap='beforeend'>
         <input type="text" name='task' class="task-name" placeholder="Write you task here" maxlength="65">
         <button type="submit" class="task-submit">Submit</button>
       </form>

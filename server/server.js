@@ -14,6 +14,6 @@ app.use(express.urlencoded({extended: true}))
 
 app.post('/api/v1/tasks', TodoController.createTask)
 app.put('/api/v1/tasks/complete', TodoController.completeTask)
-app.delete('/api/v1/tasks', TodoController.deleteTask)
+app.delete('/api/v1/tasks/:id', TodoController.deleteTask)
 
 app.listen(3000, () => console.log('started listening'))
