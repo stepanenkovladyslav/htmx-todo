@@ -1,6 +1,6 @@
 <div class="task" >
   <div class='task-info'>
-  <input type="checkbox" hx-put="http://localhost:3000/api/v1/tasks/complete" hx-vals='{"id": "{{id}}"}'>
+  <input type="checkbox" {{status}} hx-put="http://localhost:3000/api/v1/tasks/complete" hx-vals='{"id": "{{id}}"}' hx-swap='none'>
   <p>{{task}}</p>
   </div>
   <button class='delete-task' hx-delete="http://localhost:3000/api/v1/tasks/{{id}}" hx-target='closest .task' hx-swap='outerHTML' >Delete</button>
