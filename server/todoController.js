@@ -47,7 +47,7 @@ class TodoController {
 
       taskList.tasks.push(task)
       
-      fs.writeFile(path.join(__dirname, '/todo.json'), JSON.stringify(taskList), (err) => {
+      fs.writeFile(todoFilePath, JSON.stringify(taskList), (err) => {
         if (err) {
           return next(APIError.internal('Internal Server Error'))
         }
@@ -107,11 +107,11 @@ class TodoController {
       const newTaskList = taskList.tasks.filter(task => task.id !== id)          
       taskList.tasks = newTaskList;
 
-      fs.writeFile(path.join(__dirname, '/todo.json'), JSON.stringify(taskList), (err) => {
+      fs.writeFile(todoFilePath, JSON.stringify(taskList), (err) => {
         if (err) {
           return next(APIError.internal('Internal Server Error'))
         }
-        return res.status(200).end('')
+        return res.status(204).end('')
       })
     })
   }
