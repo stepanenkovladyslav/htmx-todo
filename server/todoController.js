@@ -41,7 +41,7 @@ class TodoController {
       }
 
       const taskList = JSON.parse(data);
-      const id = taskList.tasks.length > 0 ? taskList.tasks.length + 1 : 1;
+      const id = taskList.tasks.length > 0 ? taskList.tasks[taskList.tasks.length - 1].id + 1 : 1;
       const task = {id: id,  task: req.body.task, status: "incomplete"}
 
       taskList.tasks.push(task)
