@@ -2,6 +2,7 @@ const fs = require('fs');
 const { handlebars } = require('hbs');
 const engine = require('engine-handlebars')(handlebars)
 const path = require('path')
+const APIError = require('./error/ApiError.js')
 
 const todoFilePath = path.join(__dirname,  'todo.json');
 const templateFilePath = path.join(__dirname, 'views', 'add-task.hbs')
@@ -9,10 +10,10 @@ const templateFilePath = path.join(__dirname, 'views', 'add-task.hbs')
 
 class TodoController {
 
-  static getTasks(req, res) {
+  static getTasks(req, res, next) {
     fs.readFile(todoFilePath, (err, data) => {
       if (err) {
-        return res.status(500).json({message: 'Internal Server Error'})
+        return next(APIError.internal('Internal Server Error'))
       }
 
       const template = fs.readFileSync(templateFilePath, 'utf8');
@@ -34,10 +35,10 @@ class TodoController {
     })
   }
 
-  static createTask (req, res)  {
+  static createTask (req, res, next)  {
     fs.readFile(todoFilePath, (err, data) => {
       if (err) {
-        return res.status(500).json({message: 'Internal Server Error'})
+        return next(APIError.internal('Internal Server Error'))
       }
 
       const taskList = JSON.parse(data);
@@ -48,17 +49,17 @@ class TodoController {
       
       fs.writeFile(path.join(__dirname, '/todo.json'), JSON.stringify(taskList), (err) => {
         if (err) {
-          return res.status(500).json({message: 'Internal Server Error'})
+          return next(APIError.internal('Internal Server Error'))
         }
-      return res.status(201).render('add-task.hbs', {task: req.body.task, id:id })
+        return res.status(201).render('add-task.hbs', {task: req.body.task, id:id })
       })
     })
   }
 
-  static changeTaskStatus(req, res)  {
+  static changeTaskStatus(req, res, next)  {
     fs.readFile(todoFilePath, (err, data) => {
       if (err) {
-       return res.status(500).json({message: 'Internal Server Error'})
+        return next(APIError.internal('Internal Server Error'))
       }
 
       const id = +req.body.id;
@@ -66,7 +67,7 @@ class TodoController {
       const neededTask = taskList.tasks.find(task => task.id === id)
 
       if (!neededTask) {
-        return res.status(404).json({message: "Task not found"})
+        return next(APIError.notFound("Task not found"))
       }
 
       const newStatus = neededTask.status === 'completed' ? 'incomplete' : 'completed'
@@ -82,17 +83,17 @@ class TodoController {
 
       fs.writeFile(todoFilePath, JSON.stringify(taskList), (err) => {
         if (err) {
-          return res.status(500).json({message: 'Internal Server Error'})
+          return next(APIError.internal('Internal Server Error'))
         }
-       return res.status(200).json({...neededTask, status: newStatus})
+         return res.status(200).json({...neededTask, status: newStatus})
       })
     })
   }
 
-  static deleteTask (req, res)  {
+  static deleteTask (req, res, next)  {
     fs.readFile(todoFilePath, (err, data) => {
       if (err) {
-        return res.status(500).json({message: 'Internal Server Error'})
+        return next(APIError.internal('Internal Server Error'))
       }
       
       const id = +req.params.id;
@@ -100,7 +101,7 @@ class TodoController {
       const neededTask = taskList.tasks.find(task => task.id === id)
 
       if (!neededTask) {
-        return res.status(404).json({message: 'Task not found'})
+        return next(APIError.notFound('Task not found'))
       }
 
       const newTaskList = taskList.tasks.filter(task => task.id !== id)          
@@ -108,9 +109,8 @@ class TodoController {
 
       fs.writeFile(path.join(__dirname, '/todo.json'), JSON.stringify(taskList), (err) => {
         if (err) {
-          return res.status(500).json({message: 'Internal Server Error'})
+          return next(APIError.internal('Internal Server Error'))
         }
-
         return res.status(200).end('')
       })
     })
