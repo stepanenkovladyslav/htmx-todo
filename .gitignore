@@ -1,4 +1,5 @@
 /server/node_modules
 /client/node_modules
 .DS_Store
-server/todo.json
+./server/todo.json
+
