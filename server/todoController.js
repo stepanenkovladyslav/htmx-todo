@@ -28,6 +28,7 @@ class TodoController {
           }
           return compileTasks({task: item.task, id: item.id})
         }) 
+
         const combinedHTML = renderedTasks.join('')
         return res.send(combinedHTML)
       }
@@ -111,7 +112,7 @@ class TodoController {
         if (err) {
           return next(APIError.internal('Internal Server Error'))
         }
-        return res.status(204).end('')
+        return res.status(200).end('')
       })
     })
   }
