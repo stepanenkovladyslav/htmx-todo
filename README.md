@@ -1,6 +1,6 @@
 # HTMX Todo List
 
-![](client/images/htmx-load.png)
+![](client/images/app-view.png)
 
 ## Project Description
 
